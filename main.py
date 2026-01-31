@@ -21,6 +21,18 @@ def elevate():
 
 elevate()
 
+def set_working_directory():
+    """Определяет рабочую папку правильно и для EXE, и для .py"""
+    if getattr(sys, 'frozen', False):
+        application_path = os.path.dirname(sys.executable)
+    else:
+        application_path = os.path.dirname(os.path.abspath(__file__))
+    
+    os.chdir(application_path)
+    return application_path
+
+set_working_directory()
+
 try:
     import customtkinter as ctk
     from PIL import Image, ImageDraw
@@ -28,8 +40,6 @@ try:
 except ImportError:
     ctypes.windll.user32.MessageBoxW(0, "pip install customtkinter pystray pillow", "Ошибка", 0x10)
     sys.exit()
-
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 SERVICE_NAME = "RazreshenieService"
 CMD_FILE = "razreshenie_svc.cmd"
